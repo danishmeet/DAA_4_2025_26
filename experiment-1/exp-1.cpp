@@ -68,3 +68,8 @@ int main()
 
     return 0;
 }
+
+
+// T(n) = 3T(n/2) + nlogn + n + n 
+//
+// Time complexity = O(n^1.58)  
