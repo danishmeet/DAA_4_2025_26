@@ -1,0 +1,48 @@
+Algorithm: Cheapest Flights Within K Stops
+
+Input:
+  n       → number of cities (nodes)
+  flights → list of edges (u → v, cost)
+  src     → source city
+  dst     → destination city
+  k       → maximum stops allowed (not counting src)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Initialize Distances
+  - Create dist[0..n-1], set all = infinity
+  - Set dist[src] = 0
+  (dist[i] = cheapest cost to reach city i so far)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 2: Relax All Edges (k+1) Times
+  - k stops = k+1 edges = k+1 relaxation rounds
+  - Each round i guarantees optimal cost using
+    at most i edges (i-1 intermediate stops)
+
+  For i = 0 to k:
+  │
+  ├─ Step 2.1: Snapshot
+  │    temp = copy of dist
+  │    (prevents reusing edges added in same round)
+  │
+  ├─ Step 2.2: Relax Every Edge
+  │    For each flight (u → v, cost):
+  │      If dist[u] ≠ infinity:
+  │        temp[v] = min(temp[v], dist[u] + cost)
+  │
+  └─ Step 2.3: Commit Round
+       dist = temp
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 3: Return Result
+  If dist[dst] == ∞  →  return -1   (unreachable within k stops)
+  Else               →  return dist[dst]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Complexity:
+  Time  → O(k × E)   outer loop runs k+1 times, each scans E edges
+  Space → O(n)        dist[] + temp[], both of size n
